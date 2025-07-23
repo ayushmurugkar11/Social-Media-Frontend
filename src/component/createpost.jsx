@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { usePostContext } from '../Context/postcontext.jsx';
 import { toast } from 'react-toastify';
+import axiosInstance from '../config/axiosinstance.jsx'; // Adjust the import path as necessary
 
 const PostForm = () => {
   const [content, setContent] = useState('');
@@ -16,8 +17,8 @@ const PostForm = () => {
 
     try {
       const token = localStorage.getItem('authToken');
-      const res = await axios.post(
-        'http://localhost:5000/api/posts',
+      const res = await axiosInstance.post(
+        'posts',
         { content },
         { headers: { Authorization: `Bearer ${token}` } }
       );

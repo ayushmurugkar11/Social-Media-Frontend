@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import axiosInstance from '../config/axiosinstance'; // Adjust the import path as necessary
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +21,7 @@ const SignupForm = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/signup', formData);
+      const res = await axiosInstance.post('auth/signup', formData);
       toast.success(res.data.message || 'Signup successful!');
       setFormData({ email: '', password: '' });
     } catch (error) {

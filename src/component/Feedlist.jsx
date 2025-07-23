@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { usePostContext } from '../Context/postcontext.jsx';
+import axiosInstance from '../config/axiosinstance.jsx'; // Adjust the import path as necessary
 
 const CACHE_KEY = 'postsCache';
 const CACHE_TIME_KEY = 'postsCacheTime';
@@ -33,7 +34,7 @@ const FeedList = () => {
       setLoading(true);
       try {
         const token = localStorage.getItem('authToken');
-        const res = await axios.get('http://localhost:5000/api/posts', {
+        const res = await axiosInstance.get('posts', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setAllPosts(res.data);
@@ -83,14 +84,14 @@ const FeedList = () => {
                 const token = localStorage.getItem('authToken');
                 try {
                   if (!post.likedByCurrentUser) {
-                    await axios.post(
-                      'http://localhost:5000/api/likes',
+                    await axiosInstance.post(
+                      'likes',
                       { postId: post._id },
                       { headers: { Authorization: `Bearer ${token}` } }
                     );
                   } else {
-                    await axios.delete(
-                      'http://localhost:5000/api/likes',
+                    await axiosInstance.delete(
+                      'likes',
                       {
                         headers: { Authorization: `Bearer ${token}` },
                         data: { postId: post._id }
@@ -98,7 +99,7 @@ const FeedList = () => {
                     );
                   }
                   // Refetch posts after like/unlike and update cache
-                  const res = await axios.get('http://localhost:5000/api/posts', {
+                  const res = await axiosInstance.get('posts', {
                     headers: { Authorization: `Bearer ${token}` },
                   });
                   setAllPosts(res.data);
